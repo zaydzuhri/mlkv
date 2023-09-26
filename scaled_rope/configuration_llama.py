@@ -111,6 +111,7 @@ class LlamaConfig(PretrainedConfig):
         num_hidden_layers=32,
         num_attention_heads=32,
         num_key_value_heads=None,
+        num_key_value_layers=None,
         hidden_act="silu",
         max_position_embeddings=2048,
         initializer_range=0.02,
@@ -135,8 +136,13 @@ class LlamaConfig(PretrainedConfig):
         # for backward compatibility
         if num_key_value_heads is None:
             num_key_value_heads = num_attention_heads
-
         self.num_key_value_heads = num_key_value_heads
+
+        # for backward compatibility, assume symmetric key/value groups
+        if num_key_value_layers is None:
+            num_key_value_layers = num_attention_heads
+        self.num_key_value_layers = num_key_value_layers
+        
         self.hidden_act = hidden_act
         self.initializer_range = initializer_range
         self.rms_norm_eps = rms_norm_eps
